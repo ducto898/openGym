@@ -211,6 +211,14 @@ test('CIMD: the document must name itself, list usable redirects and be a public
   assert.equal((await oauth.resolveCimd('https://bad.example/meta', { fetchDoc })).ok, false);
   assert.equal((await oauth.resolveCimd('https://secret.example/meta', { fetchDoc })).ok, false);
   assert.equal((await oauth.resolveCimd('https://gone.example/meta', { fetchDoc })).ok, false);
+  // ChatGPT's own document: private_key_jwt by default, "none" among the methods it supports.
+  const GPT = 'https://chatgpt.com/oauth/client.json';
+  docs[GPT] = { client_id: GPT, client_name: 'ChatGPT', redirect_uris: ['https://chatgpt.com/connector_platform_oauth_redirect'], token_endpoint_auth_method: 'private_key_jwt', token_endpoint_auth_methods_supported: ['none', 'private_key_jwt'], grant_types: ['authorization_code', 'refresh_token', 'urn:ietf:params:oauth:grant-type:jwt-bearer'], response_types: ['code'] };
+  docs['https://jwt-only.example/meta'] = { client_id: 'https://jwt-only.example/meta', redirect_uris: [CLAUDE], token_endpoint_auth_method: 'private_key_jwt', token_endpoint_auth_methods_supported: ['private_key_jwt'] };
+  const gpt = await oauth.resolveCimd(GPT, { fetchDoc });
+  assert.equal(gpt.ok, true);
+  assert.deepEqual(gpt.client.grants, ['authorization_code', 'refresh_token']);
+  assert.equal((await oauth.resolveCimd('https://jwt-only.example/meta', { fetchDoc })).ok, false);
   // Authorize with it: a loopback redirect on any port, the refresh grant from the document.
   const { c } = pkce();
   const a = oauth.startAuthorize({}, q({ client_id: URLID, redirect_uri: 'http://localhost:4567/callback', response_type: 'code', code_challenge: c, code_challenge_method: 'S256' }), new Map(), Date.now(), { client: r.client });
