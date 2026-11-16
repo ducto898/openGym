@@ -20,7 +20,7 @@ export const TOOL_NEEDS = {
   muscle_balance: ['workouts', 'view'], get_bodyweight: ['bodyweight', 'view'],
   // The library is not the user's data: any token that may see workouts or plans gets it.
   search_exercises: [['workouts', 'view'], ['plans', 'view']],
-  log_workout: ['workouts', 'apply'], import_history: ['workouts', 'apply'],
+  log_workout: ['workouts', 'apply'], import_history: ['workouts', 'apply'], get_import_format: ['workouts', 'apply'],
   create_routine: ['plans', 'apply'], update_routine: ['plans', 'apply'], delete_routine: ['plans', 'apply'],
 }
 const RANK = { off: 0, view: 1, apply: 2 }
@@ -43,7 +43,7 @@ export const INSTRUCTIONS = [
   'Read before you advise: list_routines and get_week_plan for the plan, list_workouts and estimate_1rm for how training went, muscle_balance for what is under- or over-trained.',
   'To build or change a plan, find each exercise with search_exercises and pass its id, then call create_routine or update_routine with dry_run: true, show the user the preview and save only after they agree.',
   'To log a session the user describes, use log_workout (dry_run first if you had to guess anything).',
-  'To bring in a history the user exported from another app, pass the file to import_history: preview with dry_run: true, check the exercise matches with the user, then import.',
+  'To bring in a history the user exported from another app, pass the file to import_history: preview with dry_run: true, check the exercise matches and warnings with the user, then import. To write such a CSV yourself, read get_import_format first.',
   'Weights are in the profile\'s unit (kg or lb) unless you say otherwise. Deleting needs the user\'s explicit yes.',
   'A tool that is missing was not granted: the user picks what you may see and change when they connect openGym.',
 ].join(' ')
