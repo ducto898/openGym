@@ -127,8 +127,13 @@ preview writes with `dry_run`, save after the user agrees.
 | list_workouts, get_workout, estimate_1rm, muscle_balance | Workouts: See |
 | search_exercises | Workouts or Plans: See (the library, not your data) |
 | get_bodyweight | Body weight: See |
-| log_workout | Workouts: Change directly |
+| log_workout, import_history | Workouts: Change directly |
 | create_routine, update_routine, delete_routine | Plans: Change directly |
+
+`import_history` takes an export from another app (the same files as Settings → Data & backup →
+Import from another app) and brings the whole history in with one save. Preview it with
+`dry_run`: the summary lists every exercise name and what it became, and `picks` corrects a wrong
+match. A day that already has a workout keeps it, so the same file twice adds nothing.
 
 `update_routine` with `expected_revision` and `delete_routine` (which needs it, and
 `confirm: true`) write over exactly the revision the user saw, or not at all: a profile that moved
